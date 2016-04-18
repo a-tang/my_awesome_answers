@@ -1,5 +1,14 @@
 class Question < ActiveRecord::Base
 
+  # when using `has_many` you must put a symbol for the associated record in
+  # plural format
+  # you also should provide the :dependent option which can be either:
+  # :destroy: which deletes all the associated answers when the question is deleted
+  # :nullify: which makes `question_id` NULL for all associated answers
+  has_many :answers, dependent: :destroy
+  belongs_to :category
+  belongs_to :user
+
   # validates :title, :
   validates(:title, {presence: true, uniqueness: {message: "must be unique!"}})
 
@@ -11,8 +20,8 @@ class Question < ActiveRecord::Base
   # validates :email, format: VALID_EMAIL_REGEX
 
   # this validates that the combination of title and body must be unique
-   # it means that title by itself doesn't have to unique and body by itslef
-   # doesn't have to be unique but the combination of the two must be unique
+  # it means that title by itself doesn't have to unique and body by itslef
+  # doesn't have to be unique but the combination of the two must be unique
   # validates :title, uniqueness: {scope: :body}
 
   # use 'validate' for custom validation
@@ -32,6 +41,10 @@ class Question < ActiveRecord::Base
 
   def self.recent_three
     order("created_at DESC").limit(3)
+  end
+
+  def user_full_name
+    user ? user.full_name : ""
   end
 
   private

@@ -5,7 +5,13 @@
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
+  <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.css" rel="stylesheet">
+  <link href="path/to/css/star-rating.css" media="all" rel="stylesheet" type="text/css" />
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.js"></script>
+  <script src="path/to/js/star-rating.js" type="text/javascript"></script>
 </head>
+
 <body>
 
 <!-- <a href="<%= home_path %>">Home</a> -->
@@ -19,9 +25,25 @@
 
 <%= link_to "About", about_us_path({a: 'hello', b: 123}) %>
 |
+<%= link_to "Index", questions_path({a: 'no', b: 123}) %>
+|
 <%= link_to "Contact", contact_us_path({a: 'no', b: 123}) %>
-
+|
+<%= link_to "New Question", new_question_path({a: 'no', b: 123}) %>
+|
+<% if user_signed_in? %>
+Hello <%= current_user.first_name %>,
+<%= link_to "Log out", sessions_path, method: :delete %>
+<% else %>
+<%= link_to "Sign In", new_session_path %>
+|
+<%= link_to "Sign Up", new_user_path %>
+<% end %>
 <hr>
+<%#= flash[:notice] || flash[:alert] %>
+<%= notice || alert %>
+<hr>
+
 <%= yield %>
 
 </body>

@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-
+gem 'cancancan'
 #we are telling bunlder to require Rails with EXACT version - 4.2.6
 gem 'rails', '4.2.6'
 # Use postgresql as the database for Active Record
@@ -25,14 +25,14 @@ gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 
 # Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt', '~> 3.1.7'
 
 # Use Unicorn as the app server
 # gem 'unicorn'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
-gem 'faker'
+gem 'faker', github: "stympy/faker"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -40,6 +40,7 @@ group :development, :test do
 end
 
 group :development do
+    gem 'rails-erd'
     gem "interactive_editor"
     gem "awesome_print"
     gem "hirb"

@@ -17,11 +17,31 @@ Rails.application.routes.draw do
   # this defines the `root` or home page or our application to go to the
   # WelcomeController with `index` action. We will have access to the helper
   # methods: root_path and root_url
-  delete "/questions/:id" => "questions#destroy", as: :delete_questions
-  get "/questions/:id/edit" => "questions#edit"
-  get "/questions/:id" => "questions#show"
-  post "/questions/:id/comments" => "comments#create"
-  get "/faq" => "home#faq"
+  # delete "/questions/:id" => "questions#destroy", as: :delete_questions
+  # get "/questions/:id/edit" => "questions#edit"
+  # get "/questions/:id" => "questions#show"
+  # post "/questions/:id/comments" => "comments#create"
+  # get "/faq" => "home#faq"
+  resources :users, only: [:new, :create]
+  resources :sessions, only: [:new, :create] do
+    delete :destroy, on: :collection
+    # delete :destroy, on: :member
+    # delete :destroy
+  end
+  resources :questions do
+  # get :search, on: :collection
+  # get :search, on: :member
+  # get :search
+   resources :answers, only: [:create, :destroy]
+end
+  #
+  # get     "/questions/new"      => "questions#new",     as: :new_question
+  # post    "/questions"         => "questions#create",  as: :questions
+  # get     "/questions/:id"      => "questions#show",    as: :question
+  # get     "/questions"          => "questions#index"
+  # get     "/questions/:id/edit" => "questions#edit",    as: :edit_question
+  # patch   "/questions/:id"    => "questions#update"
+  # delete  "/questions/:id"    => "questions#destroy"
 
   root "welcome#index"
 
