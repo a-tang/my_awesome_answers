@@ -33,6 +33,8 @@ Rails.application.routes.draw do
   # get :search, on: :member
   # get :search
    resources :answers, only: [:create, :destroy]
+
+   resources :likes, only: [:create, :destroy]
 end
   #
   # get     "/questions/new"      => "questions#new",     as: :new_question
