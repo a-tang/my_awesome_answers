@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem "rails_12factor", group: :production
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'cancancan'
 #we are telling bunlder to require Rails with EXACT version - 4.2.6
