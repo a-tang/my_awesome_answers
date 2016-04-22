@@ -20,23 +20,23 @@
       argument is for the anchor text and the second argument is for the `href`
       value (where you want to link to) %>
 <%= link_to("Home", home_path, {class: "abc"}) %>
-|
+||
 <!-- <a href="<%= about_us_path %>">About</a> -->
 
 <%= link_to "About", about_us_path({a: 'hello', b: 123}) %>
-|
+||
 <%= link_to "Index", questions_path({a: 'no', b: 123}) %>
-|
+||
 <%= link_to "Contact", contact_us_path({a: 'no', b: 123}) %>
-|
+||
 <%= link_to "New Question", new_question_path({a: 'no', b: 123}) %>
-|
+||
 <% if user_signed_in? %>
 Hello <%= current_user.first_name %>,
 <%= link_to "Log out", sessions_path, method: :delete %>
 <% else %>
 <%= link_to "Sign In", new_session_path %>
-|
+||
 <%= link_to "Sign Up", new_user_path %>
 <% end %>
 <hr>

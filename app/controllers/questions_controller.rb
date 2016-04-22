@@ -11,8 +11,10 @@ class QuestionsController < ApplicationController
   # update and destroy actions
   # before_action(:find_question, {only: [:show, :update, :destroy]})
   before_action :find_question, only: [:edit, :update, :destroy, :show]
-    before_action :authorize_question, only: [:edit, :update, :destroy]
+  before_action :authorize_question, only: [:edit, :update, :destroy]
 
+  # include QuestionsAnswersHelper
+  # helper_method :user_like
 
 
   # we receive a request: GET /questions/56
@@ -105,9 +107,9 @@ class QuestionsController < ApplicationController
      params.require(:question).permit([:title, :body, :category_id])
    end
 
-   def user_like
-     @user_like ||= @question.like_for(current_user)
-   end
-    helper_method :user_like
+  #  def user_like
+  #    @user_like ||= @question.like_for(current_user)
+  #  end
+  #   helper_method :user_like
 
  end

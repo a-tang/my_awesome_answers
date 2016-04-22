@@ -3,6 +3,9 @@ class AnswersController < ApplicationController
   before_action :find_question
   before_action :find_and_authorize_answer, only: :destroy
 
+  # include QuestionsAnswersHelper
+  # helper_method :user_like
+
   def create
       @question        = Question.find params[:question_id]
       answer_params    = params.require(:answer).permit(:body)

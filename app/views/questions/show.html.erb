@@ -21,17 +21,36 @@
 <% else %>
   <%= link_to "Like", question_likes_path(@question), method: :post %>
 <% end %>
-
 (<%= @question.likes.count %>)
+ ||
+ <% user_vote = @question.vote_for(current_user) %>
+ <% if user_vote && user_vote.is_up? %>
+   <%= link_to "Un-do Vote Up", question_vote_path(@question, user_vote),
+                                method: :delete %>
+   <%= link_to "Vote Down", question_vote_path(@question, user_vote, {vote: {is_up: false}}),
+                             method: :patch %>
+ <% elsif user_vote  %>
+   <%= link_to "Vote Up", question_vote_path(@question, user_vote, {vote: {is_up: true}}),
+                             method: :patch  %>
+                             ||
+   <%= link_to "Un-do Vote Down", question_vote_path(@question, user_vote),
+                                method: :delete %>
+ <% else %>
+   <%= link_to "Vote Up", question_votes_path(@question, {vote: {is_up: true}}),
+                           method: :post %>
+                           ||
+   <%= link_to "Vote Down", question_votes_path(@question, {vote: {is_up: false}}),
+                           method: :post %>
+ <% end %>
+ (<%= @question.vote_value %>)
 <hr>
+
 <%= @answer.errors.full_messages.join(", ") %>
 <%#= form_for @answer, url: question_answers_path(@question) do |f| %>
 <%= form_for [@question, @answer] do |form_helper|  %>
   <%= form_helper.text_area :body %>
-  <br>
   <%= form_helper.submit %>
 <% end %>
-
 
 <h2>Answers</h2>
 <% @question.answers.each do |ans| %>
