@@ -1,5 +1,4 @@
 class QuestionsController < ApplicationController
-
   before_action :authenticate_user!, except: [:index, :show]
   # defining a method in as a `before_action` will make it so that Rails
   # executes that method before executing the action. This is still within
@@ -9,63 +8,60 @@ class QuestionsController < ApplicationController
   # be executed before.
   # in the code below `find_question` will only be executed before: show, edit
   # update and destroy actions
-  # before_action(:find_question, {only: [:show, :update, :destroy]})
+  # before_action(:find_question, {only: [:show, :edit, :update, :destroy]})
+
   before_action :find_question, only: [:edit, :update, :destroy, :show]
   before_action :authorize_question, only: [:edit, :update, :destroy]
 
   # include QuestionsAnswersHelper
   # helper_method :user_like
 
-
-  # we receive a request: GET /questions/56
-  #params[:id] will be '56'
-  def show
-    @answer = Answer.new
-    # puts "#{params.inspect}"
-    # puts "questions#show id = #{params[:id]}";
-    # render text: "questions#show id = #{params[:id]}";
+  def new
+    # we need to define a new `Question` object in order to be able to
+    # properly generate a form in Rails
+    # Question is the ActiveRecord model
+    @question = Question.new
   end
 
   def create
-    #Method 1
+    # Method 1
     # @question       = Question.new
     # @question.title = params[:question][:title]
     # @question.body  = params[:question][:body]
     # @question.save!
 
     # Method 2
-       # @question = Question.create({title: params[:question][:title],
-       #                              body:  params[:question][:body]})
+    # @question = Question.create({title: params[:question][:title],
+    #                              body:  params[:question][:body]})
 
-       # Method 3
-       # params[:question] looks like: {"title"=>"question from web", "body"=>"question body from web"}
-       # @question = Question.create(params[:question])
-       # this will throw a: ActiveModel::ForbiddenAttributesError exception
-
-       # Method 4
-       # we use Strong Parameters feature of Rails
+    # Method 3
+    # params[:question] looks like: {"title"=>"question from web", "body"=>"question body from web"}
+    # @question = Question.create(params[:question])
+    # this will throw a: ActiveModel::ForbiddenAttributesError exception
 
 
-       @question        = Question.new(question_params)
-       @question.user  = current_user
-      if @question.save
-        flash[:notice] = "Question created!"
-        # render text: "Success"
-        # redirect_to question_path({id: @question.id})
-        redirect_to question_path(@question)
+    # Method 4
+    # we use Strong Parameters feature of Rails
 
-      else
-        flash[:alert] = "Question didn't save!"
-        # this will render `app/views/questions/new.html.erb` because the default
-        # in this action is to render `app/views/questions/create.html.erb`
-        render :new
-      end
+    @question       = Question.new(question_params)
+    @question.user  = current_user
+    if @question.save
+      flash[:notice] = "Question created!"
+      # render :show
+      # redirect_to question_path({id: @question.id})
+      redirect_to question_path(@question)
+    else
+      flash[:alert] = "Question didn't save!"
+      # this will render `app/views/questions/new.html.erb` because the default
+      # in this action is to render `app/views/questions/create.html.erb`
+      render :new
+    end
   end
 
-  def new
-    #We need to define a new Question object in order to be able to properly generate a form in rails
-    #Question is the ActiveRecord model
-    @question = Question.new
+  # we receive a request such as : GET /questions/56
+  # params[:id] will be `56`
+  def show
+    @answer = Answer.new
   end
 
   def index
@@ -73,14 +69,13 @@ class QuestionsController < ApplicationController
   end
 
   def edit
-
   end
 
   def update
-    # flash messages can be set either directly using: flash[:notice] = ".."
-    # you can also pass a `:notice` or `:alert` options to the `redirect_to`
-    # method.
     if @question.update question_params
+      # flash messages can be set either directly using: flash[:notice] = ".."
+      # you can also pass a `:notice` or `:alert` options to the `redirect_to`
+      # method.
       redirect_to question_path(@question), notice: "Question updated!"
     else
       render :edit
@@ -88,28 +83,28 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-
     @question.destroy
-    redirect_to questions_path, notice: "Question destrooyed!"
+    redirect_to questions_path, notice: "Question: #{@question.title} deleted!"
   end
 
   private
 
-   def authorize_question
-     redirect_to root_path unless can? :manage, @question
-   end
+  def authorize_question
+    redirect_to root_path unless can? :crud, @question
+  end
 
-   def find_question
-     @question = Question.find params[:id]
-   end
+  def find_question
+    @question = Question.find params[:id]
+  end
 
-   def question_params
-     params.require(:question).permit([:title, :body, :category_id])
-   end
+  def question_params
+    params.require(:question).permit([:title, :body,
+                                      :category_id, tag_ids: []])
+  end
+  #
+  # def user_like
+  #   @user_like ||= @question.like_for(current_user)
+  # end
+  # helper_method :user_like
 
-  #  def user_like
-  #    @user_like ||= @question.like_for(current_user)
-  #  end
-  #   helper_method :user_like
-
- end
+end

@@ -16,7 +16,11 @@ class Question < ActiveRecord::Base
   has_many :votes, dependent: :destroy
   has_many :voting_users, through: :votes, source: :user
 
-  # validates :title, :
+  has_many :taggings, dependent: :destroy
+  has_many :tags, through: :taggings
+
+  # validates_presence_of :title # deprecated > likely to be removed in Rails 5
+  # validates :title, :body, presence: true
   validates(:title, {presence: true, uniqueness: {message: "must be unique!"}})
 
   validates :body, length: {minimum: 5}
@@ -31,23 +35,23 @@ class Question < ActiveRecord::Base
   # doesn't have to be unique but the combination of the two must be unique
   # validates :title, uniqueness: {scope: :body}
 
-  # use 'validate' for custom validation
+  # we use `validate` to reference a method that will be used for our custom
+  # validation
+  validate :no_monkey
 
-  # scope :recent_three, lambda {order("created_at DESC").limit(3)}
-
+  # this will call the `set_defaults` method right after the initialize phase
   after_initialize :set_defaults
 
   before_validation :titleize_title
 
-  validate :no_monkey
-
-  def self.search(search_term)
-    ## where(["title ILIKE :term OR body ILIKE :term", {term: "%#{search_term}%"}])
-    where(["title ILIKE ? OR body ILIKE ?", "%#{search_term}%", "%#{search_term}%"])
-  end
-
+  # scope :recent_three, lambda { order("created_at DESC").limit(3) }
   def self.recent_three
     order("created_at DESC").limit(3)
+  end
+
+  def self.search(search_term)
+    # where(["title ILIKE :term OR body ILIKE :term", {term: "%#{search_term}%"}])
+    where(["title ILIKE ? OR body ILIKE ?", "%#{search_term}%", "%#{search_term}%"])
   end
 
   def user_full_name
@@ -65,7 +69,6 @@ class Question < ActiveRecord::Base
   def vote_value
     votes.up_count - votes.down_count
   end
-  
 
   private
 
@@ -77,11 +80,10 @@ class Question < ActiveRecord::Base
     self.view_count ||= 0
   end
 
-
   def no_monkey
     if title.present? && title.downcase.include?("monkey")
-      errors.add(:title, "No Monkeys!")
+      errors.add(:title, "No monkeys!")
+    end
   end
-end
 
 end
