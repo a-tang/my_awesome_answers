@@ -13,7 +13,7 @@ gem 'rack-cors', require: 'rack/cors'
 gem 'chosen-rails'
 # This tells Bundler that we need Uglifier gem with version 1.3.0 or hight
 gem 'uglifier', '>= 1.3.0'
-
+gem 'friendly_id'
 # Use CoffeeScript for .coffee assets and views
 
 # This tell Bundler that we need coffee-rails gem with version 4.1.x where

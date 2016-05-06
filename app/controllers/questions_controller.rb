@@ -81,15 +81,16 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if @question.update question_params
-      # flash messages can be set either directly using: flash[:notice] = ".."
-      # you can also pass a `:notice` or `:alert` options to the `redirect_to`
-      # method.
-      redirect_to question_path(@question), notice: "Question updated!"
-    else
-      render :edit
+      @question.slug = nil
+      if @question.update question_params
+        # flash messages can be set either directly using: flash[:notice] = ".."
+        # you can also pass a `:notice` or `:alert` options to the `redirect_to`
+        # method.
+        redirect_to question_path(@question), notice: "Question updated!"
+      else
+        render :edit
+      end
     end
-  end
 
   def destroy
     @question.destroy
@@ -103,12 +104,16 @@ class QuestionsController < ApplicationController
   end
 
   def find_question
-    @question = Question.find params[:id]
+    @question = Question.friendly.find params[:id]
   end
 
   def question_params
     params.require(:question).permit([:title, :body,
                                       :category_id, tag_ids: []])
+  end
+
+  def find_question
+    @question = Question.friendly.find params[:id]
   end
   #
   # def user_like
