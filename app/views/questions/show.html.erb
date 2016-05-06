@@ -17,10 +17,15 @@
                         data: {confirm: "Are you sure?"} %>
 <% end %>
 
+
+
 <div id="question-like">
   <%= render "/likes/like" %>
 </div>
 |
+
+
+
 <% user_vote = @question.vote_for(current_user) %>
 <% if user_vote && user_vote.is_up? %>
   <%= link_to "Un-do Vote Up", question_vote_path(@question, user_vote),
@@ -50,4 +55,9 @@
   <% @question.answers.each do |ans| %>
     <%= render "/answers/answer", answer: ans %>
   <% end %>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="edit-answer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  
 </div>

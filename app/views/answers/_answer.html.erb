@@ -9,5 +9,12 @@
                           method: :delete,
                           remote: true %>
   <% end %>
+  <% if can? :edit, answer %>
+    <%= link_to "Edit", edit_question_answer_path(@question, answer),
+                        remote: true,
+                        data: {toggle: "modal", target: "#edit-answer"},
+                        class: "btn btn-primary btn-sm"
+                        %>
+  <% end %>
   <hr>
 </div>

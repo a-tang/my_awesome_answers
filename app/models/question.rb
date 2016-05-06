@@ -23,7 +23,7 @@ class Question < ActiveRecord::Base
   # validates :title, :body, presence: true
   validates(:title, {presence: true, uniqueness: {message: "must be unique!"}})
 
-  validates :body, length: {minimum: 5}
+  validates :body, length: {minimum: 5}, presence: true
 
   validates :view_count, numericality: {greater_than_or_equal_to: 0}
 

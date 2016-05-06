@@ -34,7 +34,7 @@ resources :password_resets, only: [:new, :create, :edit, :update]
   # get :search, on: :collection
   # get :search, on: :member
   # get :search
-   resources :answers, only: [:create, :destroy]
+   resources :answers, only: [:create, :destroy, :edit, :update]
    resources :likes, only: [:create, :destroy]
    resources :votes, only: [:create, :update, :destroy]
  end
